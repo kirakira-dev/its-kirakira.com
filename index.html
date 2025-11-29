@@ -1507,9 +1507,8 @@
             const deltaTime = currentTime - lastTime;
             lastTime = currentTime;
             
-            // Ultra-smooth fade for longer trailing effect
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Clear canvas with transparent background (no white fade)
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Update and draw ripples with smooth interpolation
             for (let i = ripples.length - 1; i >= 0; i--) {
