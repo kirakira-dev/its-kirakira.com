@@ -1,10 +1,11 @@
+//yahaha! you found me!
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Kirakira's website!">
-    <title>its-kirakira.com</title>
+    <title>Kirakira's Website!</title>
     <style>
         * {
             margin: 0;
@@ -43,7 +44,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 999998;
         }
 
         #cursorBall {
@@ -281,10 +282,16 @@
             z-index: 10;
         }
 
-        .theme-button {
+        .header-buttons {
             position: absolute;
             top: 1.5rem;
             right: 2rem;
+            display: flex;
+            gap: 0.75rem;
+            z-index: 100;
+        }
+
+        .theme-button {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -297,7 +304,6 @@
             letter-spacing: 0.05em;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            z-index: 100;
         }
 
         .theme-button:hover {
@@ -308,9 +314,12 @@
         }
 
         @media (max-width: 768px) {
-            .theme-button {
+            .header-buttons {
                 top: 1rem;
                 right: 1rem;
+                gap: 0.5rem;
+            }
+            .theme-button {
                 padding: 0.4rem 0.8rem;
                 font-size: 0.75rem;
             }
@@ -380,6 +389,52 @@
             border-bottom: 3px solid var(--primary-color);
             padding-bottom: 0.5rem;
             display: inline-block;
+        }
+
+        /* Dark Mode Styles */
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --bg-alt: #2a2a2a;
+            --text-color: #e5e5e5;
+            --text-light: #d5d5d5;
+            --border-color: #404040;
+        }
+
+        .dark-mode body {
+            background-color: var(--bg-color);
+        }
+
+        .dark-mode nav {
+            background-color: rgba(26, 26, 26, 0.95) !important;
+        }
+
+        .dark-mode main {
+            background-color: var(--bg-color);
+        }
+
+        .dark-mode .about {
+            background-color: var(--bg-alt);
+        }
+
+        .dark-mode .project-card {
+            background-color: var(--bg-alt);
+        }
+
+        .dark-mode .contact {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        }
+
+        .dark-mode .social-media {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        }
+
+        .dark-mode .social-link {
+            background-color: var(--bg-alt);
+            border-color: var(--primary-color);
+        }
+
+        .dark-mode footer {
+            background-color: var(--bg-alt);
         }
 
         .about {
@@ -653,7 +708,10 @@
     </div>
     
     <header>
-        <button class="theme-button" id="changeThemeBtn">Change Theme</button>
+        <div class="header-buttons">
+            <button class="theme-button" id="lightDarkBtn">Light</button>
+            <button class="theme-button" id="changeThemeBtn">Change Theme</button>
+        </div>
         <div class="container">
             <h1>Kirakira</h1>
             <p>Developer & Creator</p>
@@ -664,7 +722,7 @@
         <div class="container">
             <ul>
                 <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="#projects">Achievements</a></li>
                 <li><a href="#social">Social</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -676,27 +734,24 @@
             <h2>About</h2>
             <div class="about">
                 <p>
-                    Welcome to my personal website! I'm a developer passionate about creating 
-                    innovative solutions and exploring new technologies. This site showcases 
-                    some of my work and interests.
+                    Hi! I'm kirakira, who mainly focuses on Python when I'm coding some simple calc script and some C++ when involving Splatoon 3 modding. For ASM, I only know some very basic ARMv8 opcodes (Nintendo Switch uses ARMv8) so unfortunately, I can't make patches all by myself ;-;
+                </p>
+                <p>
+                    Anyways, look at some of my achievements!
                 </p>
             </div>
         </section>
 
         <section id="projects">
-            <h2>Projects</h2>
+            <h2>Achievements</h2>
             <div class="projects">
                 <div class="project-card">
                     <h3>KirunaNX</h3>
-                    <p>A Nintendo Switch homebrew project featuring various mods and utilities.</p>
-                    <a href="https://github.com/kirakira/KirunaNX-Dev" target="_blank" rel="noopener noreferrer">
-                        View on GitHub →
-                    </a>
-                </div>
-                <div class="project-card">
-                    <h3>imgui-nvn</h3>
-                    <p>ImGui implementation for Nintendo Switch NVN graphics API.</p>
-                    <a href="https://github.com/kirakira/imgui-nvn" target="_blank" rel="noopener noreferrer">
+                    <p>A functional Splatoon 3 mod menu with a nice and smooth design plus a functioning patcher. 50/50 online safe.</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-light);">
+                        KirunaNX is based on GLOSHSEP's s3_imgui_base, thanks for that. An old version that is public for a template purpose, as KirunaNX has become private.
+                    </p>
+                    <a href="https://github.com/kirakira-dev/KirunaNX-ARCHIVED" target="_blank" rel="noopener noreferrer">
                         View on GitHub →
                     </a>
                 </div>
@@ -714,7 +769,7 @@
                         </svg>
                         GitHub
                     </a>
-                    <a href="https://x.com/@its-kirakira" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <a href="https://x.com/@its_kirakira" target="_blank" rel="noopener noreferrer" class="social-link">
                         <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                         </svg>
@@ -1153,6 +1208,37 @@
                     showThemeModal();
                 });
             }
+
+            // Light/Dark mode switcher
+            const lightDarkBtn = document.getElementById('lightDarkBtn');
+            const savedMode = localStorage.getItem('colorMode') || 'light';
+            
+            function applyColorMode(mode) {
+                if (mode === 'dark') {
+                    document.documentElement.classList.add('dark-mode');
+                    if (lightDarkBtn) {
+                        lightDarkBtn.textContent = 'Dark';
+                    }
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                    if (lightDarkBtn) {
+                        lightDarkBtn.textContent = 'Light';
+                    }
+                }
+                localStorage.setItem('colorMode', mode);
+            }
+            
+            // Apply saved mode on load
+            applyColorMode(savedMode);
+            
+            // Toggle on button click
+            if (lightDarkBtn) {
+                lightDarkBtn.addEventListener('click', function() {
+                    const currentMode = document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light';
+                    const newMode = currentMode === 'light' ? 'dark' : 'light';
+                    applyColorMode(newMode);
+                });
+            }
             
             // Theme selection handler (works for both regular and unlocked themes)
             function setupThemeSelection() {
@@ -1188,6 +1274,22 @@
         // Smooth Pink Water Ripple Effect
         const canvas = document.getElementById('rippleCanvas');
         const ctx = canvas.getContext('2d');
+        
+        // Load lense and mask images
+        const lenseImg = new Image();
+        const maskImg = new Image();
+        let lenseLoaded = false;
+        let maskLoaded = false;
+        
+        lenseImg.onload = () => {
+            lenseLoaded = true;
+        };
+        maskImg.onload = () => {
+            maskLoaded = true;
+        };
+        
+        lenseImg.src = 'lense.png';
+        maskImg.src = 'mask.png';
         
         // Set canvas size
         function resizeCanvas() {
@@ -1249,18 +1351,19 @@
         
         // Ripple class
         class Ripple {
-            constructor(x, y) {
+            constructor(x, y, useLense = false) {
                 this.x = x;
                 this.y = y;
                 this.radius = 0;
-                this.maxRadius = Math.random() * 100 + 140;
+                this.maxRadius = useLense ? Math.random() * 150 + 200 : Math.random() * 100 + 140;
                 this.speed = Math.random() * 0.4 + 1.0; // More consistent, smoother speed
                 this.opacity = 1;
                 const colors = getRippleColors();
                 this.color = colors[Math.floor(Math.random() * colors.length)];
                 this.life = 1;
-                this.fadeSpeed = 0.010; // Faster fade for shorter lifetime
+                this.fadeSpeed = useLense ? 0.008 : 0.010; // Faster fade for shorter lifetime
                 this.startTime = performance.now();
+                this.useLense = useLense;
             }
             
             update() {
@@ -1278,35 +1381,67 @@
             }
             
             draw() {
-                const gradient = ctx.createRadialGradient(
-                    this.x, this.y, 0,
-                    this.x, this.y, this.radius
-                );
-                
-                // Ultra-smooth gradient with many color stops
-                gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.75})`);
-                gradient.addColorStop(0.2, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.6})`);
-                gradient.addColorStop(0.4, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.4})`);
-                gradient.addColorStop(0.6, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.25})`);
-                gradient.addColorStop(0.75, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.15})`);
-                gradient.addColorStop(0.9, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.05})`);
-                gradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
-                
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                // Ultra-smooth outer ring with gradient
-                const ringGradient = ctx.createRadialGradient(
-                    this.x, this.y, this.radius * 0.9,
-                    this.x, this.y, this.radius
-                );
-                ringGradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.2})`);
-                ringGradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
-                ctx.strokeStyle = ringGradient;
-                ctx.lineWidth = 1;
-                ctx.stroke();
+                if (this.useLense && lenseLoaded && maskLoaded) {
+                    // Use lense and mask images for distortion effect
+                    const size = this.radius * 2;
+                    const halfSize = size / 2;
+                    
+                    // Save context
+                    ctx.save();
+                    
+                    // Create clipping path
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.clip();
+                    
+                    // Draw mask as alpha mask
+                    ctx.globalAlpha = this.opacity * 0.6;
+                    ctx.drawImage(maskImg, this.x - halfSize, this.y - halfSize, size, size);
+                    
+                    // Draw lense with color overlay
+                    ctx.globalCompositeOperation = 'multiply';
+                    ctx.globalAlpha = this.opacity * 0.4;
+                    ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.5)`;
+                    ctx.fillRect(this.x - halfSize, this.y - halfSize, size, size);
+                    
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.globalAlpha = this.opacity * 0.5;
+                    ctx.drawImage(lenseImg, this.x - halfSize, this.y - halfSize, size, size);
+                    
+                    // Restore context
+                    ctx.restore();
+                } else {
+                    // Regular gradient ripple
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y, 0,
+                        this.x, this.y, this.radius
+                    );
+                    
+                    // Ultra-smooth gradient with many color stops
+                    gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.75})`);
+                    gradient.addColorStop(0.2, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.6})`);
+                    gradient.addColorStop(0.4, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.4})`);
+                    gradient.addColorStop(0.6, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.25})`);
+                    gradient.addColorStop(0.75, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.15})`);
+                    gradient.addColorStop(0.9, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.05})`);
+                    gradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
+                    
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    
+                    // Ultra-smooth outer ring with gradient
+                    const ringGradient = ctx.createRadialGradient(
+                        this.x, this.y, this.radius * 0.9,
+                        this.x, this.y, this.radius
+                    );
+                    ringGradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity * 0.2})`);
+                    ringGradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
+                    ctx.strokeStyle = ringGradient;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
             }
         }
         
@@ -1360,16 +1495,10 @@
             }
         });
         
-        // Click handler for extra ripples
+        // Click handler for lense/mask ripples
         document.addEventListener('click', (e) => {
-            for (let i = 0; i < 4; i++) {
-                setTimeout(() => {
-                    ripples.push(new Ripple(
-                        e.clientX + (Math.random() - 0.5) * 30,
-                        e.clientY + (Math.random() - 0.5) * 30
-                    ));
-                }, i * 40);
-            }
+            // Create single ripple with lense and mask
+            ripples.push(new Ripple(e.clientX, e.clientY, true));
         });
         
         // Animation loop with ultra-smooth rendering
