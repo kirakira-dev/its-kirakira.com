@@ -1,0 +1,11 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/api/v1/kiruna-update-checker/"
+  to = "/.netlify/functions/kiruna-update-checker"
+  status = 200
+
+[functions]
+  directory = ".netlify/functions"
+
