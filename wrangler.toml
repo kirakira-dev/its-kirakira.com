@@ -1,6 +1,7 @@
 name = "kiruna-update-checker"
 main = "cloudflare-worker.js"
 compatibility_date = "2024-01-01"
+compatibility_flags = []
 
 # Route configuration
 # Note: Routes are configured in Cloudflare Dashboard under Workers > Routes
