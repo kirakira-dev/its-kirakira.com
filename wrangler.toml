@@ -1,4 +1,4 @@
-name = "kiruna-update-checker"
+name = "kiruna-update-api"
 main = "cloudflare-worker.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = []
