@@ -306,6 +306,7 @@
             if (!message) return;
 
             try {
+                console.log('Sending message to:', API_URL);
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
@@ -317,18 +318,32 @@
                     })
                 });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        // Message will be added via polling
-                        messageInput.value = '';
-                    }
+                console.log('Response status:', response.status);
+                
+                let data;
+                try {
+                    data = await response.json();
+                } catch (parseError) {
+                    const text = await response.text();
+                    console.error('Failed to parse JSON response:', text);
+                    alert(`Server error: ${response.status} - ${text.substring(0, 100)}`);
+                    return;
+                }
+
+                console.log('Response data:', data);
+                
+                if (response.ok && data.success) {
+                    // Message will be added via polling
+                    messageInput.value = '';
                 } else {
-                    alert('Failed to send message. Please try again.');
+                    // Show more detailed error
+                    const errorMsg = data.error || `HTTP ${response.status}`;
+                    console.error('API Error:', errorMsg, data);
+                    alert(`Failed to send message: ${errorMsg}`);
                 }
             } catch (error) {
                 console.error('Error sending message:', error);
-                alert('Failed to send message. Please check your connection.');
+                alert(`Failed to send message: ${error.message}`);
             }
         }
 
