@@ -99,12 +99,23 @@
             border-bottom-right-radius: 0.25rem;
         }
 
-        .message.bot {
+        .message.other {
             align-self: flex-start;
             background: var(--message-bg);
             color: var(--text-color);
             border: 1px solid var(--border-color);
             border-bottom-left-radius: 0.25rem;
+        }
+
+        .message .username {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            opacity: 0.9;
+        }
+
+        .message.user .username {
+            text-align: right;
         }
 
         .message .timestamp {
@@ -213,54 +224,112 @@
 
         const chatMessages = document.getElementById('chatMessages');
         const messageInput = document.getElementById('messageInput');
+        const API_URL = '/api/v1/chat-messages';
+        
+        let lastMessageId = null;
+        let displayedMessageIds = new Set();
 
-        // Bot responses
-        const botResponses = [
-            "That's interesting! Tell me more.",
-            "I see what you mean!",
-            "That's a great point!",
-            "Thanks for sharing that with me!",
-            "I'm here to chat! What else is on your mind?",
-            "That sounds awesome!",
-            "I'd love to hear more about that.",
-            "You're making me think!",
-            "That's really cool!",
-            "I appreciate you chatting with me!"
-        ];
-
-        function getRandomResponse() {
-            return botResponses[Math.floor(Math.random() * botResponses.length)];
+        // Format timestamp
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
 
-        function addMessage(text, isUser) {
+        // Add message to chat
+        function addMessage(messageData) {
+            // Skip if already displayed
+            if (displayedMessageIds.has(messageData.id)) {
+                return;
+            }
+            displayedMessageIds.add(messageData.id);
+
+            const isCurrentUser = messageData.username.toLowerCase() === username.toLowerCase();
             const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            messageDiv.className = `message ${isCurrentUser ? 'user' : 'other'}`;
+            messageDiv.setAttribute('data-id', messageData.id);
+            
+            // Add username (only for other users)
+            if (!isCurrentUser) {
+                const usernameDiv = document.createElement('div');
+                usernameDiv.className = 'username';
+                usernameDiv.textContent = messageData.username;
+                messageDiv.appendChild(usernameDiv);
+            }
             
             const textDiv = document.createElement('div');
-            textDiv.textContent = text;
+            textDiv.textContent = messageData.text;
             messageDiv.appendChild(textDiv);
             
             const timestamp = document.createElement('div');
             timestamp.className = 'timestamp';
-            const now = new Date();
-            timestamp.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            timestamp.textContent = formatTimestamp(messageData.timestamp);
             messageDiv.appendChild(timestamp);
+            
+            // Remove welcome message if it exists
+            const welcomeMsg = chatMessages.querySelector('.welcome-message');
+            if (welcomeMsg) {
+                welcomeMsg.remove();
+            }
             
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function sendMessage() {
+        // Load messages from API
+        async function loadMessages() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error('Failed to load messages');
+                }
+                const data = await response.json();
+                if (data.success && data.messages) {
+                    // Add new messages
+                    data.messages.forEach(msg => {
+                        if (!displayedMessageIds.has(msg.id)) {
+                            addMessage(msg);
+                        }
+                    });
+                    // Update last message ID
+                    if (data.messages.length > 0) {
+                        lastMessageId = data.messages[data.messages.length - 1].id;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        // Send message to API
+        async function sendMessage() {
             const message = messageInput.value.trim();
             if (!message) return;
 
-            addMessage(message, true);
-            messageInput.value = '';
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        text: message
+                    })
+                });
 
-            // Bot response after a short delay
-            setTimeout(() => {
-                addMessage(getRandomResponse(), false);
-            }, 500 + Math.random() * 1000);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        // Message will be added via polling
+                        messageInput.value = '';
+                    }
+                } else {
+                    alert('Failed to send message. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Failed to send message. Please check your connection.');
+            }
         }
 
         function logout() {
@@ -275,6 +344,12 @@
                 sendMessage();
             }
         });
+
+        // Load messages on page load
+        loadMessages();
+
+        // Poll for new messages every 2 seconds
+        setInterval(loadMessages, 2000);
 
         // Focus input on load
         messageInput.focus();

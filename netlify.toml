@@ -7,6 +7,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/v1/chat-messages"
+  to = "/.netlify/functions/chat-messages"
+  status = 200
+
+[[redirects]]
   from = "/chat"
   to = "/chat/"
   status = 301
