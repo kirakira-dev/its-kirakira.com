@@ -1,9 +1,51 @@
 // Chat messages API endpoint for Vercel
 // Handles GET (retrieve messages) and POST (add message)
+// Messages are persisted to chat-messages.json file
 
-// In-memory storage (for serverless functions)
-// Note: This resets on each cold start. For production, use a database or persistent storage
-let messages = [];
+const fs = require('fs');
+const path = require('path');
+
+// Path to messages file (relative to api directory)
+const MESSAGES_FILE = path.join(process.cwd(), 'chat-messages.json');
+const MESSAGES_LOG_FILE = path.join(process.cwd(), 'chat-messages.txt');
+
+// Helper function to read messages from file
+function readMessages() {
+    try {
+        if (fs.existsSync(MESSAGES_FILE)) {
+            const fileContent = fs.readFileSync(MESSAGES_FILE, 'utf8');
+            return JSON.parse(fileContent || '[]');
+        }
+        return [];
+    } catch (error) {
+        console.error('Error reading messages file:', error);
+        return [];
+    }
+}
+
+// Helper function to write messages to file
+function writeMessages(messages) {
+    try {
+        // Keep only last 500 messages to prevent file from getting too large
+        const messagesToSave = messages.slice(-500);
+        
+        // Write JSON file
+        fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messagesToSave, null, 2), 'utf8');
+        
+        // Write human-readable .txt log file
+        const logLines = messagesToSave.map(msg => {
+            const date = new Date(msg.timestamp);
+            const dateStr = date.toLocaleString();
+            return `[${dateStr}] ${msg.username}: ${msg.text}`;
+        });
+        fs.writeFileSync(MESSAGES_LOG_FILE, logLines.join('\n') + '\n', 'utf8');
+        
+        return true;
+    } catch (error) {
+        console.error('Error writing messages file:', error);
+        return false;
+    }
+}
 
 export default function handler(req, res) {
     // Enable CORS
@@ -19,7 +61,8 @@ export default function handler(req, res) {
 
     try {
         if (req.method === 'GET') {
-            // Return all messages
+            // Read messages from file
+            const messages = readMessages();
             res.status(200).json({
                 success: true,
                 messages: messages
@@ -36,6 +79,9 @@ export default function handler(req, res) {
                 return;
             }
 
+            // Read existing messages
+            const messages = readMessages();
+
             const newMessage = {
                 id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
                 username: username,
@@ -45,9 +91,15 @@ export default function handler(req, res) {
 
             messages.push(newMessage);
 
-            // Keep only last 100 messages to prevent memory issues
-            if (messages.length > 100) {
-                messages = messages.slice(-100);
+            // Write messages back to file
+            const writeSuccess = writeMessages(messages);
+
+            if (!writeSuccess) {
+                res.status(500).json({
+                    success: false,
+                    error: 'Failed to save message'
+                });
+                return;
             }
 
             res.status(200).json({
@@ -61,6 +113,7 @@ export default function handler(req, res) {
             });
         }
     } catch (error) {
+        console.error('Error in handler:', error);
         res.status(500).json({
             success: false,
             error: error.message
