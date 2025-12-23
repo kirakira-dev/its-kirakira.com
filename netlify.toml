@@ -10,6 +10,7 @@
   from = "/api/v1/chat-messages"
   to = "/.netlify/functions/chat-messages"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/chat"

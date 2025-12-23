@@ -224,7 +224,8 @@
 
         const chatMessages = document.getElementById('chatMessages');
         const messageInput = document.getElementById('messageInput');
-        const API_URL = '/api/v1/chat-messages';
+        // Try Netlify function directly first, fallback to API path
+        const API_URL = '/.netlify/functions/chat-messages';
         
         let lastMessageId = null;
         let displayedMessageIds = new Set();
