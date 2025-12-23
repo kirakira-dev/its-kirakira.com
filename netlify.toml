@@ -6,6 +6,11 @@
   to = "/.netlify/functions/kiruna-update-checker"
   status = 200
 
+[[redirects]]
+  from = "/chat"
+  to = "/chat/"
+  status = 301
+
 [functions]
   directory = ".netlify/functions"
 
